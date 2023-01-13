@@ -1900,6 +1900,8 @@ head(keep_hc2020)</code></pre>
 ## 4 2320006102    2216.   2028      1     4673 1 [1 MALE]   1 [1 POOR/NEGATIVE]
 ## 5 2320006103    4157.   2028      1      410 1 [1 MALE]   3 [3 LOW INCOME]   
 ## 6 2320012102    1961.   2069      2     2726 2 [2 FEMALE] 3 [3 LOW INCOME]</code></pre>
+<p>We can add labels to the <code>sex</code> variable where
+<code>1 = male</code> and <code>2 = female</code>.</p>
 </div>
 <div id="perform-descriptive-analysis" class="section level2">
 <h2>Perform descriptive analysis</h2>
@@ -1941,8 +1943,8 @@ will yield the weighted sample of the US population.</p>
 <pre class="r"><code>## Weighted sample of the population stratified by sex
 svytable(~sex, design = mepsdsgn)</code></pre>
 <pre><code>## sex
-##         1         2 
-## 160960989 167584308</code></pre>
+##   1 - Male 2 - Female 
+##  160960989  167584308</code></pre>
 <p>Using the survey weights, there are 160,960,989 males and 167,584,308
 females. In total, there are 328,545,297 weighted subjects in the
 <code>mepsdsgn</code> data.</p>
@@ -1963,9 +1965,9 @@ between two groups, we’ll need to use the <code>svyby</code> function
 along with the <code>svymean</code> function.</p>
 <pre class="r"><code>## Estimate the weight mean total expenditure for males and females
 svyby(~totexp20, ~sex, mepsdsgn, svymean)</code></pre>
-<pre><code>##   sex totexp20       se
-## 1   1 5861.278 243.5624
-## 2   2 6654.998 205.0776</code></pre>
+<pre><code>##                   sex totexp20       se
+## 1 - Male     1 - Male 5861.278 243.5624
+## 2 - Female 2 - Female 6654.998 205.0776</code></pre>
 <p>The average total expenditures for male and female are $5861 (SE,
 244) and $6655 (SE 205), respectively.</p>
 <p>We can perform crosstabulations with the <code>svytable</code>
@@ -1973,18 +1975,18 @@ function. Let’s look at the distribution of males and females across
 various poverty categories. In the MEPS codebook, poverty category are
 groups as: 1 = Poor/Negative, 2 = Near Poor, 3 = Low Income, 4 = Middle
 Income, and 5 = High Income.</p>
-<pre><code>##    povcat20
-## sex        1        2        3        4        5
-##   1 16644995  5955576 18910001 45083571 74366846
-##   2 21002826  6672752 21753502 47750327 70404901</code></pre>
+<pre><code>##             povcat20
+## sex                 1        2        3        4        5
+##   1 - Male   16644995  5955576 18910001 45083571 74366846
+##   2 - Female 21002826  6672752 21753502 47750327 70404901</code></pre>
 <p>To generate the proportions, you will need to use
 <code>prop.table</code>. We add the <code>margin = 1</code> option to
 calculate the column total.</p>
 <pre class="r"><code>prop.table(svytable(~sex + povcat20, design = mepsdsgn), margin = 1) ### margin = 1 calculates the column total.</code></pre>
-<pre><code>##    povcat20
-## sex          1          2          3          4          5
-##   1 0.10341012 0.03700012 0.11748189 0.28009005 0.46201783
-##   2 0.12532693 0.03981729 0.12980632 0.28493316 0.42011631</code></pre>
+<pre><code>##             povcat20
+## sex                   1          2          3          4          5
+##   1 - Male   0.10341012 0.03700012 0.11748189 0.28009005 0.46201783
+##   2 - Female 0.12532693 0.03981729 0.12980632 0.28493316 0.42011631</code></pre>
 <p>We can combine these into a contingency table using the
 <code>tbl_svysummary</code> function from the <code>gtsummary</code>
 package. We will also use the <code>tidyverse</code> package to
@@ -1996,11 +1998,11 @@ library(&quot;gtsummary&quot;)
 ## Contingency table (crosstabulations between sex and poverty category)
 mepsdsgn %&gt;%
   tbl_svysummary(by = sex, percent = &quot;column&quot;, include = c(povcat20))</code></pre>
-<div id="liminzdlhk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="nluiaerehz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
-#liminzdlhk .gt_table {
+#nluiaerehz .gt_table {
 display: table;
 border-collapse: collapse;
 margin-left: auto;
@@ -2024,7 +2026,7 @@ border-left-style: none;
 border-left-width: 2px;
 border-left-color: #D3D3D3;
 }
-#liminzdlhk .gt_heading {
+#nluiaerehz .gt_heading {
 background-color: #FFFFFF;
 text-align: center;
 border-bottom-color: #FFFFFF;
@@ -2035,11 +2037,11 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#liminzdlhk .gt_caption {
+#nluiaerehz .gt_caption {
 padding-top: 4px;
 padding-bottom: 4px;
 }
-#liminzdlhk .gt_title {
+#nluiaerehz .gt_title {
 color: #333333;
 font-size: 125%;
 font-weight: initial;
@@ -2050,7 +2052,7 @@ padding-right: 5px;
 border-bottom-color: #FFFFFF;
 border-bottom-width: 0;
 }
-#liminzdlhk .gt_subtitle {
+#nluiaerehz .gt_subtitle {
 color: #333333;
 font-size: 85%;
 font-weight: initial;
@@ -2061,12 +2063,12 @@ padding-right: 5px;
 border-top-color: #FFFFFF;
 border-top-width: 0;
 }
-#liminzdlhk .gt_bottom_border {
+#nluiaerehz .gt_bottom_border {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#liminzdlhk .gt_col_headings {
+#nluiaerehz .gt_col_headings {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -2080,7 +2082,7 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#liminzdlhk .gt_col_heading {
+#nluiaerehz .gt_col_heading {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2099,7 +2101,7 @@ padding-left: 5px;
 padding-right: 5px;
 overflow-x: hidden;
 }
-#liminzdlhk .gt_column_spanner_outer {
+#nluiaerehz .gt_column_spanner_outer {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2110,13 +2112,13 @@ padding-bottom: 0;
 padding-left: 4px;
 padding-right: 4px;
 }
-#liminzdlhk .gt_column_spanner_outer:first-child {
+#nluiaerehz .gt_column_spanner_outer:first-child {
 padding-left: 0;
 }
-#liminzdlhk .gt_column_spanner_outer:last-child {
+#nluiaerehz .gt_column_spanner_outer:last-child {
 padding-right: 0;
 }
-#liminzdlhk .gt_column_spanner {
+#nluiaerehz .gt_column_spanner {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
@@ -2127,7 +2129,7 @@ overflow-x: hidden;
 display: inline-block;
 width: 100%;
 }
-#liminzdlhk .gt_group_heading {
+#nluiaerehz .gt_group_heading {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2152,7 +2154,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 text-align: left;
 }
-#liminzdlhk .gt_empty_group_heading {
+#nluiaerehz .gt_empty_group_heading {
 padding: 0.5px;
 color: #333333;
 background-color: #FFFFFF;
@@ -2166,13 +2168,13 @@ border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 vertical-align: middle;
 }
-#liminzdlhk .gt_from_md > :first-child {
+#nluiaerehz .gt_from_md > :first-child {
 margin-top: 0;
 }
-#liminzdlhk .gt_from_md > :last-child {
+#nluiaerehz .gt_from_md > :last-child {
 margin-bottom: 0;
 }
-#liminzdlhk .gt_row {
+#nluiaerehz .gt_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2190,7 +2192,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 overflow-x: hidden;
 }
-#liminzdlhk .gt_stub {
+#nluiaerehz .gt_stub {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2202,7 +2204,7 @@ border-right-color: #D3D3D3;
 padding-left: 5px;
 padding-right: 5px;
 }
-#liminzdlhk .gt_stub_row_group {
+#nluiaerehz .gt_stub_row_group {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2215,10 +2217,10 @@ padding-left: 5px;
 padding-right: 5px;
 vertical-align: top;
 }
-#liminzdlhk .gt_row_group_first td {
+#nluiaerehz .gt_row_group_first td {
 border-top-width: 2px;
 }
-#liminzdlhk .gt_summary_row {
+#nluiaerehz .gt_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -2227,14 +2229,14 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#liminzdlhk .gt_first_summary_row {
+#nluiaerehz .gt_first_summary_row {
 border-top-style: solid;
 border-top-color: #D3D3D3;
 }
-#liminzdlhk .gt_first_summary_row.thick {
+#nluiaerehz .gt_first_summary_row.thick {
 border-top-width: 2px;
 }
-#liminzdlhk .gt_last_summary_row {
+#nluiaerehz .gt_last_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2243,7 +2245,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#liminzdlhk .gt_grand_summary_row {
+#nluiaerehz .gt_grand_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -2252,7 +2254,7 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#liminzdlhk .gt_first_grand_summary_row {
+#nluiaerehz .gt_first_grand_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2261,10 +2263,10 @@ border-top-style: double;
 border-top-width: 6px;
 border-top-color: #D3D3D3;
 }
-#liminzdlhk .gt_striped {
+#nluiaerehz .gt_striped {
 background-color: rgba(128, 128, 128, 0.05);
 }
-#liminzdlhk .gt_table_body {
+#nluiaerehz .gt_table_body {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -2272,7 +2274,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#liminzdlhk .gt_footnotes {
+#nluiaerehz .gt_footnotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -2285,7 +2287,7 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#liminzdlhk .gt_footnote {
+#nluiaerehz .gt_footnote {
 margin: 0px;
 font-size: 90%;
 padding-left: 4px;
@@ -2293,7 +2295,7 @@ padding-right: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#liminzdlhk .gt_sourcenotes {
+#nluiaerehz .gt_sourcenotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -2306,58 +2308,58 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#liminzdlhk .gt_sourcenote {
+#nluiaerehz .gt_sourcenote {
 font-size: 90%;
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#liminzdlhk .gt_left {
+#nluiaerehz .gt_left {
 text-align: left;
 }
-#liminzdlhk .gt_center {
+#nluiaerehz .gt_center {
 text-align: center;
 }
-#liminzdlhk .gt_right {
+#nluiaerehz .gt_right {
 text-align: right;
 font-variant-numeric: tabular-nums;
 }
-#liminzdlhk .gt_font_normal {
+#nluiaerehz .gt_font_normal {
 font-weight: normal;
 }
-#liminzdlhk .gt_font_bold {
+#nluiaerehz .gt_font_bold {
 font-weight: bold;
 }
-#liminzdlhk .gt_font_italic {
+#nluiaerehz .gt_font_italic {
 font-style: italic;
 }
-#liminzdlhk .gt_super {
+#nluiaerehz .gt_super {
 font-size: 65%;
 }
-#liminzdlhk .gt_footnote_marks {
+#nluiaerehz .gt_footnote_marks {
 font-style: italic;
 font-weight: normal;
 font-size: 75%;
 vertical-align: 0.4em;
 }
-#liminzdlhk .gt_asterisk {
+#nluiaerehz .gt_asterisk {
 font-size: 100%;
 vertical-align: 0;
 }
-#liminzdlhk .gt_indent_1 {
+#nluiaerehz .gt_indent_1 {
 text-indent: 5px;
 }
-#liminzdlhk .gt_indent_2 {
+#nluiaerehz .gt_indent_2 {
 text-indent: 10px;
 }
-#liminzdlhk .gt_indent_3 {
+#nluiaerehz .gt_indent_3 {
 text-indent: 15px;
 }
-#liminzdlhk .gt_indent_4 {
+#nluiaerehz .gt_indent_4 {
 text-indent: 20px;
 }
-#liminzdlhk .gt_indent_5 {
+#nluiaerehz .gt_indent_5 {
 text-indent: 25px;
 }
 </style>
@@ -2366,8 +2368,8 @@ text-indent: 25px;
   <thead class="gt_col_headings">
     <tr>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Characteristic&lt;/strong&gt;"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;1&lt;/strong&gt;, N = 160,960,989&lt;sup class=&quot;gt_footnote_marks&quot;&gt;1&lt;/sup&gt;"><strong>1</strong>, N = 160,960,989<sup class="gt_footnote_marks">1</sup></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;2&lt;/strong&gt;, N = 167,584,308&lt;sup class=&quot;gt_footnote_marks&quot;&gt;1&lt;/sup&gt;"><strong>2</strong>, N = 167,584,308<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;1 - Male&lt;/strong&gt;, N = 160,960,989&lt;sup class=&quot;gt_footnote_marks&quot;&gt;1&lt;/sup&gt;"><strong>1 - Male</strong>, N = 160,960,989<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;2 - Female&lt;/strong&gt;, N = 167,584,308&lt;sup class=&quot;gt_footnote_marks&quot;&gt;1&lt;/sup&gt;"><strong>2 - Female</strong>, N = 167,584,308<sup class="gt_footnote_marks">1</sup></th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
