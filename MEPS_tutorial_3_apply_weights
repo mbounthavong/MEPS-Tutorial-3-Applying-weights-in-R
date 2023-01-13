@@ -12,7 +12,7 @@ output:
 ---
 
 ## Introduction
-The Medical Expenditure Panel Survey (MEPS) is based on a complex survey design. Hence, it is necessary to apply survey weights to generate estimates that are representative of the United States (US) population. The weights take into account the stratification, clustering, sampling, and non-response based on the Current Population Survey. Although you can perform descriptive and complex analyses without the weights, they will not provide you with accurate standard errors of the population. Rather, not applying the weights will only yield standard errors for the sample. 
+The [Medical Expenditure Panel Survey (MEPS)](https://www.meps.ahrq.gov/mepsweb/) is based on a complex survey design. Hence, it is necessary to apply survey weights to generate estimates that are representative of the United States (US) population. The weights take into account the stratification, clustering, sampling, and non-response based on the Current Population Survey. Although you can perform descriptive and complex analyses without the weights, they will not provide you with accurate standard errors of the population. Rather, not applying the weights will only yield standard errors for the sample. 
 
 ## Types of weights
 In MEPS, there are three types of weights that are critical for most descriptive and multivariate analyses: person weight (`perwtXXf`), stratum (`varstr`), and cluster (`varpsu`). The `XX` is replaced by the year of the survey. For example, the person weight in 2020 is labelled as `perwt20f`. 
