@@ -49,6 +49,14 @@ keep_hc2020 <- subset(hc2020, select = c(dupersid, perwt20f, varstr, varpsu, tot
 head(keep_hc2020)
 ```
 
+We can add labels to the `sex` variable where `1 = male` and `2 = female`.
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+keep_hc2020$sex <- factor(keep_hc2020$sex, 
+                          levels = c(1, 2),
+                          labels = c("1 - Male", "2 - Female"))
+```
+
 ## Perform descriptive analysis
 Now that we have a smaller dataframe with the variables of interest, let's apply the survey weights to some descriptive analysis. 
 
