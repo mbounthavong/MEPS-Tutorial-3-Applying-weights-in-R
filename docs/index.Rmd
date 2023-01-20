@@ -110,7 +110,7 @@ The average total expenditures for male and female are \$5861 (SE, 244) and \$66
 
 We can perform crosstabulations with the `svytable` function. Let's look at the distribution of males and females across various poverty categories. In the MEPS codebook, poverty category are groups as: 1 = Poor/Negative, 2 = Near Poor, 3 = Low Income, 4 = Middle Income, and 5 = High Income. 
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
+```{r, echo = TRUE, message = FALSE, warning = FALSE}
 ## Crosstab sex and poverty category
 svytable(~sex + povcat20, design = mepsdsgn)
 ```
